@@ -4,7 +4,11 @@ git代码为SpringBoot项目全Scala语法编写。
 
 ## 环境说明
 Flink 1.9
+
 kafka 2.12
+
 scala 2.12
+
 ClickHouse 19.14.3.3
+
 jdk   1.8
