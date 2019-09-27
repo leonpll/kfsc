@@ -32,7 +32,7 @@ class ClickHouseJDBCSinkScala(schemaName: String, tableName: String, url: String
   var pst: PreparedStatement = null
   var columnNameAndType: util.List[String] = null
 
-  // 阶乘open方法
+  // 继承open方法
   override def open(parameters: Configuration): Unit = {
 
     System.out.println("----------------------1------------------------------------")

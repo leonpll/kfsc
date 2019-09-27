@@ -8,6 +8,9 @@ import org.springframework.boot.{CommandLineRunner, SpringApplication}
   */
 @SpringBootApplication
 class ScalaBootApp extends CommandLineRunner {
+
+
+  // 启动时执行func
   override def run(args: String*): Unit = {
 
     ExcuteObject.startWithScala()
