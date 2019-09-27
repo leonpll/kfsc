@@ -1,0 +1,15 @@
+server:
+  port: 8082
+
+#Mysql
+spring:
+  application:
+    name: msg
+
+clickhouse:
+  address: jdbc:clickhouse://111.231.193.90:8123
+  username: default
+  password: default
+  db: default
+  socketTimeout: 600000
+
