@@ -1,11 +1,12 @@
 package com.pactera
 
 import java.util.Random
+import collection.JavaConverters._
 
-object ParserMap extends Serializable {
+object ParserMap {
 
 
-  def parserStr(a: String): Map[String, Any] = {
+  def parserStr(a: String): java.util.Map[String, Any] = {
 
     var user: Map[String, Any] = Map()
 
@@ -19,6 +20,6 @@ object ParserMap extends Serializable {
     user += ("username" -> "我是测试数据")
     user += ("realname" -> "我是测试数据1")
     user += ("birthday" -> z(new Random().nextInt(29) + 1))
-    return user;
+    user.asJava;
   }
 }

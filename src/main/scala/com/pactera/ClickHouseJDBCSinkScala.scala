@@ -10,21 +10,21 @@ import ru.yandex.clickhouse.ClickHouseDataSource
 import ru.yandex.clickhouse.settings.ClickHouseProperties
 
 
-class ClickHouseJDBCSinkScala(schemaName: String, tableName: String, url: String, user: String, password: String, batchSize: Int, batchInterval: Int) extends RichSinkFunction[Map[String, Any]] {
+class ClickHouseJDBCSinkScala() extends RichSinkFunction[util.Map[String, Any]] {
 
 
   // 定义提交窗口时间/频次值
-  var batchSizeEu: Int = batchSize
-  var batchIntervalEu: Int = batchInterval
+  var batchSize: Int = Integer.valueOf(EnvironmentAwareUtil.getPro("clickhouse.batchSize"))
+  var batchInterval: Int = Integer.valueOf(EnvironmentAwareUtil.getPro("clickhouse.batchInterval"))
   var batchCount: Int = 0
   var lastBatchTime: Long = System.currentTimeMillis
 
   // clickhouse参数值
-  var schemaNameEu: String = schemaName
-  var tableNameEu: String = schemaName
-  var userEu: String = schemaName
-  var passwordEu: String = schemaName
-  var urlEu: String = schemaName
+  var schemaName: String = EnvironmentAwareUtil.getPro("clickhouse.schemaName")
+  var tableName: String = EnvironmentAwareUtil.getPro("clickhouse.table")
+  var user: String = EnvironmentAwareUtil.getPro("clickhouse.username")
+  var password: String = EnvironmentAwareUtil.getPro("clickhouse.password")
+  var url: String = EnvironmentAwareUtil.getPro("clickhouse.address")
 
   // 全局连接变量
   var dataSource: ClickHouseDataSource = null
@@ -41,7 +41,7 @@ class ClickHouseJDBCSinkScala(schemaName: String, tableName: String, url: String
     val properties = new ClickHouseProperties()
     properties.setUser(user)
     properties.setPassword(password)
-    properties.setDatabase("default")
+    properties.setDatabase(schemaName)
     properties.setSocketTimeout(50000)
     dataSource = new ClickHouseDataSource(url, properties)
 
@@ -54,7 +54,7 @@ class ClickHouseJDBCSinkScala(schemaName: String, tableName: String, url: String
   }
 
   // 继承invoke
-  override def invoke(map: Map[String, Any], context: SinkFunction.Context[_]): Unit = {
+  override def invoke(map: util.Map[String, Any], context: SinkFunction.Context[_]): Unit = {
 
     try { //this inserts your data
 
@@ -149,7 +149,7 @@ class ClickHouseJDBCSinkScala(schemaName: String, tableName: String, url: String
     * @param columnNamesAndType 字段类型
     * @return
     */
-  private def generatePreparedCloumns(ps: PreparedStatement, columnNamesAndType: util.List[String], map: Map[String, Any]) = {
+  private def generatePreparedCloumns(ps: PreparedStatement, columnNamesAndType: util.List[String], map: util.Map[String, Any]) = {
     try {
       for (i <- 0 to columnNamesAndType.size()) {
 
@@ -211,7 +211,7 @@ class ClickHouseJDBCSinkScala(schemaName: String, tableName: String, url: String
   }
 
   private def unwrapNullable(clickhouseType: String): String = {
-    return clickhouseType.substring("Nullable(".length, clickhouseType.length - 1)
+     clickhouseType.substring("Nullable(".length, clickhouseType.length - 1)
   }
 
   /**
@@ -221,7 +221,7 @@ class ClickHouseJDBCSinkScala(schemaName: String, tableName: String, url: String
     * @return
     */
   private def isNullable(clickhouseType: String): Boolean = {
-    return clickhouseType.startsWith("Nullable(") && clickhouseType.endsWith(")")
+     clickhouseType.startsWith("Nullable(") && clickhouseType.endsWith(")")
   }
 
   /**
@@ -231,6 +231,6 @@ class ClickHouseJDBCSinkScala(schemaName: String, tableName: String, url: String
     * @return
     */
   private def isArray(clickhouseType: String): Boolean = {
-    return clickhouseType.startsWith("Array(") && clickhouseType.endsWith(")")
+     clickhouseType.startsWith("Array(") && clickhouseType.endsWith(")")
   }
 }

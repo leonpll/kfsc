@@ -7,8 +7,13 @@ import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.scala._
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.env.Environment
 
 
+/**
+  * 执行Flink主类
+  */
 object ExcuteObject  {
 
   implicit val typeInfo = TypeInformation.of(classOf[String])
@@ -39,14 +44,7 @@ object ExcuteObject  {
     println(log_convert_message)
 
     // 创建clickhouseSink连接
-    val schemaName = "default"
-    val tableName = "user"
-    val url = "jdbc:clickhouse://111.231.193.90:8123"
-    val user = "default"
-    val password = "default"
-    val batchSize = "5" //每5条提交一次
-    val batchInterval = "4000" // 每隔4秒提交一次
-    val clickhouseSink = new ClickHouseJDBCSinkScala(schemaName, tableName, url, user, password, Integer.valueOf(batchSize), Integer.valueOf(batchInterval))
+    val clickhouseSink = new ClickHouseJDBCSinkScala()
 
     log_convert_message.addSink(clickhouseSink)
     env.execute("Kafka Window WordCount")
